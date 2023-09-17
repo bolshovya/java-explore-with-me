@@ -10,6 +10,7 @@ import ru.practicum.ewm.stats.server.model.StatModel;
 import ru.practicum.ewm.stats.server.storage.StatRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,8 +29,23 @@ public class StatServiceImpl implements StatServise {
         return StatMapper.getStatHitDto(statFromDb);
     }
 
-    public ViewStat getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+    @Override
+    public List<ViewStat> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         log.info("StatServiceImpl GET: получение статистик uri: {}", uris);
 
+        List<ViewStat> stats = new ArrayList<>();
+
+        if (unique.equals(true)) {
+            for (String uri : uris) {
+                ViewStat stat = statRepository.findCountByUri(uri, start, end);
+                stats.add(stat);
+            }
+        } else {
+            for (String uri : uris) {
+                ViewStat stat = statRepository.findCountByUri(uri, start, end);
+                stats.add(stat);
+            }
+        }
+        return stats;
     }
 }

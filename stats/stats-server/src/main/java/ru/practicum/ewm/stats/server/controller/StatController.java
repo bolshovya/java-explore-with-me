@@ -10,6 +10,7 @@ import ru.practicum.ewm.stats.dto.ViewStat;
 import ru.practicum.ewm.stats.server.service.StatServise;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,16 +29,17 @@ public class StatController {
         return statServise.create(endpointHit);
     }
 
-    @GetMapping("/stat")
+    @GetMapping("/stats")
     @ResponseStatus(code = HttpStatus.OK)
-    public ViewStat getStats(
+    public List<ViewStat> getStats(
             @RequestParam(value = "start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
             @RequestParam(value = "end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
             @RequestParam(value = "uris") List<String> uris,
             @RequestParam(value = "unique", defaultValue = "false") Boolean unique
     ) {
         log.info("StatController GET: получение статистик uri: {}", uris);
-        statServise.getStats(start, end, uris, unique);
+        return statServise.getStats(start, end, uris, unique);
+
     }
 
 }
