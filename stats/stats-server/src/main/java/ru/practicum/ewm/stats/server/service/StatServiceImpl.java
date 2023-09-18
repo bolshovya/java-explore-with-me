@@ -4,19 +4,21 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.ewm.stats.dto.EndpointHit;
-import ru.practicum.ewm.stats.dto.ViewStat;
+import ru.practicum.ewm.stats.dto.ViewStatDto;
 import ru.practicum.ewm.stats.server.model.StatMapper;
 import ru.practicum.ewm.stats.server.model.StatModel;
+import ru.practicum.ewm.stats.server.model.ViewStat;
 import ru.practicum.ewm.stats.server.storage.StatRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class StatServiceImpl implements StatServise {
+public class StatServiceImpl implements StatService {
 
     private final StatRepository statRepository;
 
@@ -30,22 +32,15 @@ public class StatServiceImpl implements StatServise {
     }
 
     @Override
-    public List<ViewStat> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+    public List<ViewStatDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         log.info("StatServiceImpl GET: получение статистик uri: {}", uris);
 
         List<ViewStat> stats = new ArrayList<>();
 
-        if (unique.equals(true)) {
-            for (String uri : uris) {
-                ViewStat stat = statRepository.findCountByUri(uri, start, end);
-                stats.add(stat);
-            }
+        if (unique.equals(false)) {
+            return statRepository.findCountByUri(uris, start, end).stream().map(StatMapper::getViewStatDto).collect(Collectors.toList());
         } else {
-            for (String uri : uris) {
-                ViewStat stat = statRepository.findCountByUri(uri, start, end);
-                stats.add(stat);
-            }
+            return statRepository.findCountByUriUnique(uris, start, end).stream().map(StatMapper::getViewStatDto).collect(Collectors.toList());
         }
-        return stats;
     }
 }

@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class ViewStat {
+public class ViewStatDto {
 
     private String app;
 
