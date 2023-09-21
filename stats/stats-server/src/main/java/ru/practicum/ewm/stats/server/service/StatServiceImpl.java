@@ -7,11 +7,9 @@ import ru.practicum.ewm.stats.dto.EndpointHit;
 import ru.practicum.ewm.stats.dto.ViewStatDto;
 import ru.practicum.ewm.stats.server.model.StatMapper;
 import ru.practicum.ewm.stats.server.model.StatModel;
-import ru.practicum.ewm.stats.server.model.ViewStat;
 import ru.practicum.ewm.stats.server.storage.StatRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
