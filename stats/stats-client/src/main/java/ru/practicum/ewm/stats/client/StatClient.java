@@ -14,9 +14,7 @@ import java.util.List;
 @Service
 public class StatClient {
 
-    private final String API_PREFIX_HIT = "/hit";
 
-    private final String API_PREFIX_STAT = "/stats";
 
     private final WebClient webClient;
 
@@ -28,7 +26,7 @@ public class StatClient {
     public Mono<EndpointHit> createEndpointHit(EndpointHit endpointHit) {
 
         return webClient.post()
-                .uri(API_PREFIX_HIT)
+                .uri("/hit")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body(Mono.just(endpointHit), EndpointHit.class)
                 .retrieve()
@@ -39,7 +37,7 @@ public class StatClient {
     public Mono<List<ViewStatDto>> getStat(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
 
         return webClient.get()
-                .uri(API_PREFIX_STAT + "?start={start}&end={end}&uris={uris}&unique={unique}", start, end, uris, unique)
+                .uri("/stats?start={start}&end={end}&uris={uris}&unique={unique}", start, end, uris, unique)
                 .retrieve()
                 .bodyToFlux(ViewStatDto.class)
                 .collectList();
