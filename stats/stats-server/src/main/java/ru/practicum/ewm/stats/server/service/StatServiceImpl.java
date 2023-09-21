@@ -35,8 +35,6 @@ public class StatServiceImpl implements StatService {
     public List<ViewStatDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         log.info("StatServiceImpl GET: получение статистик uri: {}", uris);
 
-        List<ViewStat> stats = new ArrayList<>();
-
         if (unique.equals(false)) {
             return statRepository.findCountByUri(uris, start, end).stream().map(StatMapper::getViewStatDto).collect(Collectors.toList());
         } else {
