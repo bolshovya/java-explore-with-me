@@ -14,9 +14,9 @@ import java.util.List;
 @Service
 public class StatClient {
 
-    private final static String API_PREFIX_HIT = "/hit";
+    private final String API_PREFIX_HIT = "/hit";
 
-    private final static String API_PREFIX_STAT = "/stats";
+    private final String API_PREFIX_STAT = "/stats";
 
     private final WebClient webClient;
 
