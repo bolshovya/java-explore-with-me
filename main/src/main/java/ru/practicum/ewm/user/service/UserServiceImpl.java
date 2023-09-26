@@ -2,6 +2,8 @@ package ru.practicum.ewm.user.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.exception.NotFoundException;
@@ -9,6 +11,9 @@ import ru.practicum.ewm.user.User;
 import ru.practicum.ewm.user.dto.UserDto;
 import ru.practicum.ewm.user.dto.UserMapper;
 import ru.practicum.ewm.user.storage.UserRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,5 +40,14 @@ public class UserServiceImpl implements UserService {
         log.info("UserServiceImpl: удаление пользователя с id: {}", userId);
         userRepository.deleteById(userId);
         log.info("UserServiceImpl: пользователь с id: {} удален", userId);
+    }
+
+    @Override
+    public List<UserDto> findAll(List<Long> ids, Integer from, Integer size) {
+        log.info("UserServiceImpl: получение пользователей с id: {}", ids);
+        Pageable pageable = PageRequest.of(from / size, size);
+
+        List<User> usersFromDb = userRepository.findAllByIdIn(ids, pageable);
+        return usersFromDb.stream().map(UserMapper::getUserDto).collect(Collectors.toList());
     }
 }

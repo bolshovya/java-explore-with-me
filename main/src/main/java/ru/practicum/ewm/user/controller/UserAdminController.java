@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.user.dto.UserDto;
 import ru.practicum.ewm.user.service.UserService;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.PositiveOrZero;
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/admin/users")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -16,10 +20,6 @@ public class UserAdminController {
 
     private final UserService userService;
 
-    @GetMapping
-    public UserDto findAll() {
-        return null;
-    }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
@@ -38,6 +38,14 @@ public class UserAdminController {
         userService.deleteUserById(userId);
     }
 
-
+    @GetMapping
+    public List<UserDto> findAll(
+            @RequestParam(required = false) List<Long> ids,
+            @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
+            @RequestParam(required = false, defaultValue = "10") @PositiveOrZero Integer size
+    ) {
+        log.info("UserAdminController: получение пользователей с id: {}", ids);
+        return userService.findAll(ids, from, size);
+    }
 
 }

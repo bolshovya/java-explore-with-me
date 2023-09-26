@@ -2,7 +2,6 @@ package ru.practicum.ewm.stats.client;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import ru.practicum.ewm.stats.dto.EndpointHit;
@@ -11,10 +10,8 @@ import ru.practicum.ewm.stats.dto.ViewStatDto;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Service
+
 public class StatClient {
-
-
 
     private final WebClient webClient;
 
