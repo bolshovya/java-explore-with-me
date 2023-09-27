@@ -1,19 +1,19 @@
 package ru.practicum.ewm.exception;
 
-import org.springframework.http.HttpStatus;
-
 public class ErrorResponse {
 
     private String error;
-    private HttpStatus httpStatus;
 
 
     public ErrorResponse(String error) {
         this.error = error;
     }
 
-    public ErrorResponse(String error, HttpStatus httpStatus) {
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
         this.error = error;
-        this.httpStatus = httpStatus;
     }
 }

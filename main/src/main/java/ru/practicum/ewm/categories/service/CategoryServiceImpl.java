@@ -37,7 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     public void deleteCategoryById(Long catId) {
         categoryRepository.findById(catId)
                 .orElseThrow(() ->
-                        new NotFoundException("CategoryNotFoundException: категория с id: " + catId + " не найдена"));
+                        new NotFoundException("Category with id=" + catId + " was not found"));
         log.info("CategoryServiceImpl: удаление категории с id: {}", catId);
         categoryRepository.deleteById(catId);
         log.info("CategoryServiceImpl: категория с id: {} удалена", catId);
@@ -48,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
     public CategoryDto update(Long catId, NewCategoryDto newCategoryDto) {
         categoryRepository.findById(catId)
                 .orElseThrow(() ->
-                        new NotFoundException("CategoryNotFoundException: категория с id: " + catId + " не найдена"));
+                        new NotFoundException("Category with id=" + catId + " was not found"));
         log.info("CategoryServiceImpl: обновление данных для категории с id: {}, {}", catId, newCategoryDto);
         Category categoryToDb = CategoryMapper.getCategory(newCategoryDto);
         categoryToDb.setId(catId);
@@ -71,7 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         Category categoryFromDb = categoryRepository.findById(catId)
                 .orElseThrow(() ->
-                        new NotFoundException("CategoryNotFoundException: категория с id: " + catId + " не найдена"));
+                        new NotFoundException("Category with id=" + catId + " was not found"));
         return CategoryMapper.getCategoryDto(categoryFromDb);
     }
 }

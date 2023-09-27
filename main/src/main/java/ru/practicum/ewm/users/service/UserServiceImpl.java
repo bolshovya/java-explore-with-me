@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long userId) {
         userRepository.findById(userId)
                 .orElseThrow(() ->
-                        new NotFoundException("UserNotFoundException: пользователь с id: " + userId + " не найден"));
+                        new NotFoundException("User with id=" + userId + " was not found"));
         log.info("UserServiceImpl: удаление пользователя с id: {}", userId);
         userRepository.deleteById(userId);
         log.info("UserServiceImpl: пользователь с id: {} удален", userId);
