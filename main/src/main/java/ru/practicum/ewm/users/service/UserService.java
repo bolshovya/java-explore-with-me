@@ -1,7 +1,7 @@
-package ru.practicum.ewm.user.service;
+package ru.practicum.ewm.users.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.user.dto.UserDto;
+import ru.practicum.ewm.users.dto.UserDto;
 
 import java.util.List;
 

@@ -1,5 +1,4 @@
-package ru.practicum.ewm.user.dto;
-
+package ru.practicum.ewm.categories.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,9 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserShortDto {
-
-    private Long id;
+public class NewCategoryDto {
 
     private String name;
 }

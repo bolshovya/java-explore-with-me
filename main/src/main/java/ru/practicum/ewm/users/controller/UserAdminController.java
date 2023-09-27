@@ -1,14 +1,13 @@
-package ru.practicum.ewm.user.controller;
+package ru.practicum.ewm.users.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.user.dto.UserDto;
-import ru.practicum.ewm.user.service.UserService;
+import ru.practicum.ewm.users.dto.UserDto;
+import ru.practicum.ewm.users.service.UserService;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 

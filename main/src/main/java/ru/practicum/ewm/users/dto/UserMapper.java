@@ -1,7 +1,7 @@
-package ru.practicum.ewm.user.dto;
+package ru.practicum.ewm.users.dto;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.ewm.user.User;
+import ru.practicum.ewm.users.User;
 
 @UtilityClass
 public class UserMapper {
