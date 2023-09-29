@@ -42,4 +42,18 @@ public class EventMapper {
                 .views(event.getViews())
                 .build();
     }
+
+    public static EventShortDto getEventShortDto(Event event) {
+        return EventShortDto.builder()
+                .id(event.getId())
+                .annotation(event.getAnnotation())
+                .category(CategoryMapper.getCategoryDto(event.getCategory()))
+                .confirmedRequests(event.getConfirmedRequests())
+                .eventDate(event.getEventDate())
+                .initiator(UserMapper.getUserShortDto(event.getInitiator()))
+                .paid(event.getPaid())
+                .title(event.getTitle())
+                .views(event.getViews())
+                .build();
+    }
 }

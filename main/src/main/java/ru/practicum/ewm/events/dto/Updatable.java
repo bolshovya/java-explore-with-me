@@ -1,6 +1,5 @@
 package ru.practicum.ewm.events.dto;
 
-import ru.practicum.ewm.categories.Category;
 import ru.practicum.ewm.events.location.dto.LocationDto;
 
 import java.time.LocalDateTime;

@@ -2,6 +2,8 @@ package ru.practicum.ewm.events.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.categories.Category;
@@ -19,6 +21,8 @@ import ru.practicum.ewm.users.User;
 import ru.practicum.ewm.users.storage.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,10 +39,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public EventFullDto create(
-            Long userId,
-            NewEventDto newEventDto
-    ) {
+    public EventFullDto create(Long userId, NewEventDto newEventDto) {
         if(newEventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new ForbiddenException("Field: eventDate. Error: должно содержать дату, которая еще не наступила. " +
                     "Value: " + newEventDto.getEventDate());
@@ -79,11 +80,7 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     @Transactional
-    public EventFullDto updateEventByCurrentUser(
-            Long userId,
-            Long eventId,
-            UpdateEventUserRequest updateEventUserRequest
-    ) {
+    public EventFullDto updateEventByCurrentUser(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
         if(updateEventUserRequest.getEventDate() != null &&
                 updateEventUserRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new ForbiddenException("Field: eventDate. Error: должно содержать дату, которая еще не наступила. " +
@@ -161,10 +158,7 @@ public class EventServiceImpl implements EventService {
      */
     @Override
     @Transactional
-    public EventFullDto updateEventByAdmin(
-            Long eventId,
-            UpdateEventAdminRequest updateEventAdminRequest
-    ) {
+    public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         if(updateEventAdminRequest.getEventDate() != null &&
                 updateEventAdminRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
             throw new ForbiddenException("Field: eventDate. Error: должно быть не ранее, чем за час от даты публикации " +
@@ -209,5 +203,21 @@ public class EventServiceImpl implements EventService {
 
         locationRepository.save(eventFromDb.getLocation());
         return EventMapper.getEventFullDto(eventFromDb);
+    }
+
+    @Override
+    public List<EventShortDto> getAllByInitiatorId(Long userId, Integer from, Integer size) {
+        log.info("EventServiceImpl: получение всех событий, добавленных пользователем с id: {}", userId);
+        Pageable pageable = PageRequest.of(from / size, size);
+
+        return eventRepository.findAllByInitiatorId(userId, pageable)
+                .stream().map(EventMapper::getEventShortDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public EventFullDto getByInitiatorId(Long userId, Long eventId) {
+        log.info("EventServiceImpl: получение события с id: {}, добавленное пользователем с id: {}", eventId, userId);
+
+        return EventMapper.getEventFullDto(eventRepository.findByIdAndInitiatorId(eventId, userId));
     }
 }

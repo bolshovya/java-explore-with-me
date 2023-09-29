@@ -1,8 +1,6 @@
 package ru.practicum.ewm.events;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 import ru.practicum.ewm.categories.Category;
 import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.location.Location;
