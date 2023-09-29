@@ -98,55 +98,116 @@ public class EventServiceImpl implements EventService {
 
         log.info("EventServiceImpl: изменение данных события с id: {}, пользователем с id: {}", eventId, userId);
 
-        if (updateEventUserRequest.getAnnotation() != null) {
-            eventFromDb.setAnnotation(updateEventUserRequest.getAnnotation());
-        }
-
-        if (updateEventUserRequest.getCategory() != null) {
-            Category categoryUpdateEventUserRequest = categoryRepository.findById(updateEventUserRequest.getCategory())
-                    .orElseThrow(() ->
-                            new NotFoundException("Category with id=" + updateEventUserRequest.getCategory() + " was not found"));
-            eventFromDb.setCategory(categoryUpdateEventUserRequest);
-        }
-
-        if (updateEventUserRequest.getDescription() != null) {
-            eventFromDb.setDescription(updateEventUserRequest.getDescription());
-        }
-
-        if (updateEventUserRequest.getEventDate() != null) {
-            eventFromDb.setEventDate(updateEventUserRequest.getEventDate());
-        }
-
-        if (updateEventUserRequest.getLocation() != null) {
-            eventFromDb.setLocation(LocationMapper.getLocation(updateEventUserRequest.getLocation()));
-        }
-
-        if (updateEventUserRequest.getPaid() != null) {
-            eventFromDb.setPaid(updateEventUserRequest.getPaid());
-        }
+        updateEvent(updateEventUserRequest, eventFromDb);
 
         if (updateEventUserRequest.getStateAction() != null) {
-            if (updateEventUserRequest.getStateAction().equals(StateAction.SEND_TO_REVIEW)) {
+            if (updateEventUserRequest.getStateAction().equals(StateActionUserRequest.SEND_TO_REVIEW)) {
                 eventFromDb.setState(EventState.PENDING);
             }
-            if (updateEventUserRequest.getStateAction().equals(StateAction.CANCEL_REVIEW)) {
+            if (updateEventUserRequest.getStateAction().equals(StateActionUserRequest.CANCEL_REVIEW)) {
                 eventFromDb.setState(EventState.CANCELED);
             }
         }
 
-        if (updateEventUserRequest.getParticipantLimit() != null) {
-            eventFromDb.setParticipantLimit(updateEventUserRequest.getParticipantLimit());
+        eventFromDb = eventRepository.save(eventFromDb);
+        return EventMapper.getEventFullDto(eventFromDb);
+    }
+
+    private void updateEvent(Updatable updateEventRequest, Event eventFromDb) {
+        if (updateEventRequest.getAnnotation() != null) {
+            eventFromDb.setAnnotation(updateEventRequest.getAnnotation());
         }
 
-        if (updateEventUserRequest.getRequestModeration() != null) {
-            eventFromDb.setRequestModeration(updateEventUserRequest.getRequestModeration());
+        if (updateEventRequest.getCategory() != null) {
+            Category categoryUpdateEventUserRequest = categoryRepository.findById(updateEventRequest.getCategory())
+                    .orElseThrow(() ->
+                            new NotFoundException("Category with id=" + updateEventRequest.getCategory() + " was not found"));
+            eventFromDb.setCategory(categoryUpdateEventUserRequest);
         }
 
-        if (updateEventUserRequest.getTitle() != null) {
-            eventFromDb.setTitle(updateEventUserRequest.getTitle());
+        if (updateEventRequest.getDescription() != null) {
+            eventFromDb.setDescription(updateEventRequest.getDescription());
+        }
+
+        if (updateEventRequest.getEventDate() != null) {
+            eventFromDb.setEventDate(updateEventRequest.getEventDate());
+        }
+
+        if (updateEventRequest.getLocation() != null) {
+            eventFromDb.setLocation(LocationMapper.getLocation(updateEventRequest.getLocation()));
+        }
+
+        if (updateEventRequest.getPaid() != null) {
+            eventFromDb.setPaid(updateEventRequest.getPaid());
+        }
+
+        if (updateEventRequest.getParticipantLimit() != null) {
+            eventFromDb.setParticipantLimit(updateEventRequest.getParticipantLimit());
+        }
+
+        if (updateEventRequest.getRequestModeration() != null) {
+            eventFromDb.setRequestModeration(updateEventRequest.getRequestModeration());
+        }
+
+        if (updateEventRequest.getTitle() != null) {
+            eventFromDb.setTitle(updateEventRequest.getTitle());
+        }
+    }
+
+    /**
+     * дата начала изменяемого события должна быть не ранее чем за час от даты публикации. (Ожидается код ошибки 409)
+     * событие можно публиковать, только если оно в состоянии ожидания публикации (Ожидается код ошибки 409)
+     * событие можно отклонить, только если оно еще не опубликовано (Ожидается код ошибки 409)
+     */
+    @Override
+    @Transactional
+    public EventFullDto updateEventByAdmin(
+            Long eventId,
+            UpdateEventAdminRequest updateEventAdminRequest
+    ) {
+        if(updateEventAdminRequest.getEventDate() != null &&
+                updateEventAdminRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
+            throw new ForbiddenException("Field: eventDate. Error: должно быть не ранее, чем за час от даты публикации " +
+                    "Value: " + updateEventAdminRequest.getEventDate());
+        }
+
+        log.info("EventServiceImpl: изменение данных события с id: {}", eventId);
+
+        Event eventFromDb = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " was not found"));
+
+        log.info("EventServiceImpl: события с id: {} найдено в БД: {}", eventId, eventFromDb);
+
+        if(updateEventAdminRequest.getStateAction() != null) {
+            if(updateEventAdminRequest.getStateAction().equals(StateActionAdminRequest.PUBLISH_EVENT) &&
+                    !eventFromDb.getState().equals(EventState.PENDING)) {
+                throw new ForbiddenException("Cannot publish the event because it's not in the right state: " + eventFromDb.getState());
+            }
+
+            if(updateEventAdminRequest.getStateAction().equals(StateActionAdminRequest.REJECT_EVENT) &&
+                    eventFromDb.getState().equals(EventState.PUBLISHED)) {
+                throw new ForbiddenException("Cannot reject the event because it's not in the right state: " + eventFromDb.getState());
+            }
+        }
+
+        updateEvent(updateEventAdminRequest, eventFromDb);
+
+        log.info("EventServiceImpl: данные события обновлены: {}", eventFromDb);
+
+        if (updateEventAdminRequest.getStateAction() != null) {
+            if (updateEventAdminRequest.getStateAction().equals(StateActionAdminRequest.PUBLISH_EVENT)) {
+                eventFromDb.setState(EventState.PUBLISHED);
+                eventFromDb.setPublishedOn(LocalDateTime.now());
+            }
+            if (updateEventAdminRequest.getStateAction().equals(StateActionAdminRequest.REJECT_EVENT)) {
+                eventFromDb.setState(EventState.CANCELED);
+            }
         }
 
         eventFromDb = eventRepository.save(eventFromDb);
+        log.info("EventServiceImpl: новые данные события сохранены в БД: {}", eventFromDb);
+
+        locationRepository.save(eventFromDb.getLocation());
         return EventMapper.getEventFullDto(eventFromDb);
     }
 }

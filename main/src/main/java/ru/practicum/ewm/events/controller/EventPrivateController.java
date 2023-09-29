@@ -40,4 +40,5 @@ public class EventPrivateController {
         log.info("EventPrivateController: изменение данных события с id: {}, пользователем с id: {}", eventId, userId);
         return eventService.updateEventByCurrentUser(userId, eventId, updateEventUserRequest);
     }
+
 }

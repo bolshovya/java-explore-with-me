@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UpdateEventUserRequest implements Updatable {
+public class UpdateEventAdminRequest implements Updatable {
 
     @Size(min = 20, max = 2000)
     private String annotation;
@@ -33,11 +33,11 @@ public class UpdateEventUserRequest implements Updatable {
 
     private Boolean paid;
 
-    private StateActionUserRequest stateAction;
-
     private Integer participantLimit;
 
     private Boolean requestModeration;
+
+    private StateActionAdminRequest stateAction;
 
     @Size(min = 3, max = 120)
     private String title;

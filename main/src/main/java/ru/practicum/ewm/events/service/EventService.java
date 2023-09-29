@@ -3,6 +3,7 @@ package ru.practicum.ewm.events.service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.events.dto.EventFullDto;
 import ru.practicum.ewm.events.dto.NewEventDto;
+import ru.practicum.ewm.events.dto.UpdateEventAdminRequest;
 import ru.practicum.ewm.events.dto.UpdateEventUserRequest;
 
 public interface EventService {
@@ -14,5 +15,11 @@ public interface EventService {
             Long userId,
             Long eventId,
             UpdateEventUserRequest updateEventUserRequest
+    );
+
+    @Transactional
+    EventFullDto updateEventByAdmin(
+            Long eventId,
+            UpdateEventAdminRequest updateEventAdminRequest
     );
 }

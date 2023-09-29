@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS events (
     location_id BIGINT NOT NULL REFERENCES locations(location_id),
     paid BOOLEAN,
     participant_limit INT,
+    published_on TIMESTAMP WITHOUT TIME ZONE,
     request_moderation BOOLEAN,
     state VARCHAR(10),
     title VARCHAR,

@@ -1,6 +1,8 @@
 package ru.practicum.ewm.events;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 import ru.practicum.ewm.categories.Category;
 import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.location.Location;
@@ -55,6 +57,9 @@ public class Event {
 
     @Column(name = "participant_limit")
     private Integer participantLimit; // newEventDto
+
+    @Column(name = "published_on")
+    private LocalDateTime publishedOn;
 
     @Column(name = "request_moderation")
     private Boolean requestModeration; // newEventDto
