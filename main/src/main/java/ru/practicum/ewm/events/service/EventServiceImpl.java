@@ -220,4 +220,16 @@ public class EventServiceImpl implements EventService {
 
         return EventMapper.getEventFullDto(eventRepository.findByIdAndInitiatorId(eventId, userId));
     }
+
+    @Override
+    public List<EventFullDto> getAllByAdmin(List<Long> users, List<String> states, List<Long> categories,
+                                            LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
+        log.info("EventServiceImpl: получение списка всех событий с id пользователей: {}, статусом: {}, " +
+                "категорией: {}, rangeStart: {}, rangeEnd: {}", users, states, categories, rangeStart, rangeEnd);
+        Pageable pageable = PageRequest.of(from / size, size);
+
+        List<Event> events = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, pageable);
+
+        return events.stream().map(EventMapper::getEventFullDto).collect(Collectors.toList());
+    }
 }
