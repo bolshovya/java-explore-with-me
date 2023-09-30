@@ -17,9 +17,12 @@ import ru.practicum.ewm.events.location.storage.LocationRepository;
 import ru.practicum.ewm.events.storage.EventRepository;
 import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.exception.NotFoundException;
+import ru.practicum.ewm.stats.client.StatClient;
+import ru.practicum.ewm.stats.dto.EndpointHit;
 import ru.practicum.ewm.users.User;
 import ru.practicum.ewm.users.storage.UserRepository;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +39,8 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
 
     private final CategoryRepository categoryRepository;
+
+    private final StatClient statClient;
 
     @Override
     @Transactional
@@ -231,5 +236,18 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, pageable);
 
         return events.stream().map(EventMapper::getEventFullDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public EventFullDto getByIdPublic(Long id, HttpServletRequest request) {
+        log.info("EventServiceImpl: получение события с id: {}", id);
+        statClient.createEndpointHit(EndpointHit.builder()
+                .app("Explore_with_me")
+                .uri(request.getRequestURI())
+                .ip(request.getRemoteAddr())
+                .timestamp(LocalDateTime.now())
+                .build());
+
+        return EventMapper.getEventFullDto(eventRepository.findById(id).orElseThrow(() -> new NotFoundException()));
     }
 }

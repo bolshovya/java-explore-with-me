@@ -3,6 +3,7 @@ package ru.practicum.ewm.events.service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.events.dto.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,4 +23,6 @@ public interface EventService {
 
     List<EventFullDto> getAllByAdmin(List<Long> users, List<String> states, List<Long> categories,
                                      LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
+
+    EventFullDto getByIdPublic(Long id, HttpServletRequest request);
 }
