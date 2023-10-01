@@ -1,6 +1,7 @@
 package ru.practicum.ewm.events.service;
 
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.events.EventParam;
 import ru.practicum.ewm.events.dto.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,4 +26,6 @@ public interface EventService {
                                      LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 
     EventFullDto getByIdPublic(Long id, HttpServletRequest request);
+
+    List<EventShortDto> getAllPublic(EventParam eventParam);
 }

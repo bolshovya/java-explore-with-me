@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.categories.Category;
 import ru.practicum.ewm.categories.storage.CategoryRepository;
 import ru.practicum.ewm.events.Event;
+import ru.practicum.ewm.events.EventParam;
 import ru.practicum.ewm.events.dto.*;
 import ru.practicum.ewm.events.location.Location;
 import ru.practicum.ewm.events.location.dto.LocationDto;
@@ -241,6 +242,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventFullDto getByIdPublic(Long id, HttpServletRequest request) {
         log.info("EventServiceImpl: получение события с id: {}", id);
+
         statClient.createEndpointHit(EndpointHit.builder()
                 .app("Explore_with_me")
                 .uri(request.getRequestURI())
@@ -248,6 +250,28 @@ public class EventServiceImpl implements EventService {
                 .timestamp(LocalDateTime.now())
                 .build());
 
-        return EventMapper.getEventFullDto(eventRepository.findById(id).orElseThrow(() -> new NotFoundException()));
+        return EventMapper.getEventFullDto(eventRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Event with id=" + id +" was not found")));
+    }
+
+    @Override
+    public List<EventShortDto> getAllPublic(EventParam eventParam) {
+        log.info("EventServiceImpl: публичный запрос на получение списка событий");
+
+        statClient.createEndpointHit(EndpointHit.builder()
+                .app("Explore_with_me")
+                .uri(eventParam.getRequest().getRequestURI())
+                .ip(eventParam.getRequest().getRemoteAddr())
+                .timestamp(LocalDateTime.now())
+                .build());
+
+        List<Event> events = eventRepository.findAllPublic(eventParam.getText(), eventParam.getCategories(), eventParam.getPaid(),
+                eventParam.getRangeStart(), eventParam.getRangeEnd(), eventParam.getPageable());
+
+        if (eventParam.getOnlyAvailable()) {
+            return events.stream().filter(x -> x.getParticipantLimit().equals(0)).map(EventMapper::getEventShortDto).collect(Collectors.toList());
+        } else {
+            return events.stream().map(EventMapper::getEventShortDto).collect(Collectors.toList());
+        }
     }
 }
