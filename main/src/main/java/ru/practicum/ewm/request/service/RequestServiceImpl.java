@@ -18,6 +18,8 @@ import ru.practicum.ewm.users.User;
 import ru.practicum.ewm.users.storage.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -64,6 +66,31 @@ public class RequestServiceImpl implements RequestService {
         request = requestRepository.save(request);
 
         return RequestMapper.getParticipationRequestDto(request);
+    }
 
+    @Override
+    public List<ParticipationRequestDto> findAllByUserId(Long userId) {
+        log.info("RequestServiceImpl: получение списка запросов для пользователя с id: {}", userId);
+
+        return requestRepository.findAllByRequesterId(userId).stream()
+                .map(RequestMapper::getParticipationRequestDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public ParticipationRequestDto cancellingRequest(Long userId, Long requestId) {
+        log.info("RequestServiceImpl: пользователь с id: {} отменил запрос с id: {} на участии в событии",
+                userId, requestId);
+
+        Request request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new NotFoundException("Request with id=" + requestId + " was not found"));
+
+        if (!request.getRequester().getId().equals(userId)) {
+            throw new NotFoundException();
+        }
+        request.setStatus(RequestState.CANCELED);
+        request = requestRepository.save(request);
+
+        return RequestMapper.getParticipationRequestDto(request);
     }
 }

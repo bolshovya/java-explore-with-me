@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.request.dto.ParticipationRequestDto;
 import ru.practicum.ewm.request.service.RequestService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(path = "/users/{userId}/requests")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -26,5 +28,25 @@ public class RequestPrivateController {
                 eventId, userId);
 
         return requestService.create(userId, eventId);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationRequestDto> findAllByUserId(
+            @PathVariable Long userId
+    ) {
+        log.info("RequestPrivateController: получение списка запросов для пользователя с id: {}", userId);
+        return requestService.findAllByUserId(userId);
+    }
+
+    @PatchMapping("/{requestId}/cancel")
+    @ResponseStatus(HttpStatus.OK)
+    public ParticipationRequestDto cancellingRequest(
+            @PathVariable Long userId,
+            @PathVariable Long requestId
+    ) {
+        log.info("RequestPrivateController: пользователь с id: {} отменил запрос с id: {} на участии в событии",
+                userId, requestId);
+        return requestService.cancellingRequest(userId, requestId);
     }
 }
