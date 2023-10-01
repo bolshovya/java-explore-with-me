@@ -25,6 +25,7 @@ import ru.practicum.ewm.users.storage.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -269,9 +270,15 @@ public class EventServiceImpl implements EventService {
                 eventParam.getRangeStart(), eventParam.getRangeEnd(), eventParam.getPageable());
 
         if (eventParam.getOnlyAvailable()) {
-            return events.stream().filter(x -> x.getParticipantLimit().equals(0)).map(EventMapper::getEventShortDto).collect(Collectors.toList());
-        } else {
-            return events.stream().map(EventMapper::getEventShortDto).collect(Collectors.toList());
+            events = events.stream().filter(x -> x.getParticipantLimit().equals(0)).collect(Collectors.toList());
         }
+
+        if (eventParam.getSort().equals(SortState.EVENT_DATE)) {
+            events = events.stream().sorted(Comparator.comparing(Event::getEventDate)).collect(Collectors.toList());
+        } else if (eventParam.getSort().equals(SortState.VIEWS)) {
+            events = events.stream().sorted(Comparator.comparing(Event::getViews)).collect(Collectors.toList());
+        }
+
+        return events.stream().map(EventMapper::getEventShortDto).collect(Collectors.toList());
     }
 }
