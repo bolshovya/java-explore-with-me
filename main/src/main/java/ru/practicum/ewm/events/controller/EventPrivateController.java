@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.events.dto.*;
 import ru.practicum.ewm.events.service.EventService;
+import ru.practicum.ewm.request.dto.ParticipationRequestDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
@@ -72,5 +73,15 @@ public class EventPrivateController {
         log.info("EventPrivateController: изменение статуса для запросов с id: {}",
                 eventRequestStatusUpdateRequest.getRequestIds());
         return eventService.patchRequestStatus(userId, eventId, eventRequestStatusUpdateRequest);
+    }
+
+    @GetMapping("/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ParticipationRequestDto> getRequestByInitiatorId(
+            @PathVariable Long userId,
+            @PathVariable Long eventId
+    ) {
+        log.info("EventPrivateController: получение списка запросов для события с id: {}, пользователя с id: {}", eventId, userId);
+        return eventService.getRequestByInitiatorId(eventId, userId);
     }
 }

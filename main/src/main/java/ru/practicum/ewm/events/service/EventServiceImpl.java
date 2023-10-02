@@ -19,6 +19,7 @@ import ru.practicum.ewm.events.storage.EventRepository;
 import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.request.Request;
+import ru.practicum.ewm.request.dto.ParticipationRequestDto;
 import ru.practicum.ewm.request.dto.RequestMapper;
 import ru.practicum.ewm.request.dto.RequestState;
 import ru.practicum.ewm.request.storage.RequestRepository;
@@ -346,5 +347,12 @@ public class EventServiceImpl implements EventService {
                 .confirmedRequests(confirmedRequests.stream().map(RequestMapper::getParticipationRequestDto).collect(Collectors.toList()))
                 .build();
 
+    }
+
+    @Override
+    public List<ParticipationRequestDto> getRequestByInitiatorId(Long eventId, Long userId) {
+        log.info("EventServiceImpl: получение списка запросов для события с id: {}, пользователя с id: {}", eventId, userId);
+        List<Request> requests = requestRepository.findAllByEventId(eventId);
+        return requests.stream().map(RequestMapper::getParticipationRequestDto).collect(Collectors.toList());
     }
 }

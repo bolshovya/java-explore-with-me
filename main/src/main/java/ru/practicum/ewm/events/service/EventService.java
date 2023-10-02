@@ -3,6 +3,7 @@ package ru.practicum.ewm.events.service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.events.EventParam;
 import ru.practicum.ewm.events.dto.*;
+import ru.practicum.ewm.request.dto.ParticipationRequestDto;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -31,4 +32,6 @@ public interface EventService {
 
     EventRequestStatusUpdateResult patchRequestStatus(Long userId, Long eventId,
                                                       EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest);
+
+    List<ParticipationRequestDto> getRequestByInitiatorId(Long eventId, Long userId);
 }
