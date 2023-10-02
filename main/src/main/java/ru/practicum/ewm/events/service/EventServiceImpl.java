@@ -18,6 +18,10 @@ import ru.practicum.ewm.events.location.storage.LocationRepository;
 import ru.practicum.ewm.events.storage.EventRepository;
 import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.exception.NotFoundException;
+import ru.practicum.ewm.request.Request;
+import ru.practicum.ewm.request.dto.RequestMapper;
+import ru.practicum.ewm.request.dto.RequestState;
+import ru.practicum.ewm.request.storage.RequestRepository;
 import ru.practicum.ewm.stats.client.StatClient;
 import ru.practicum.ewm.stats.dto.EndpointHit;
 import ru.practicum.ewm.users.User;
@@ -25,6 +29,7 @@ import ru.practicum.ewm.users.storage.UserRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,6 +46,8 @@ public class EventServiceImpl implements EventService {
     private final UserRepository userRepository;
 
     private final CategoryRepository categoryRepository;
+
+    private final RequestRepository requestRepository;
 
     private final StatClient statClient;
 
@@ -280,5 +287,64 @@ public class EventServiceImpl implements EventService {
         }
 
         return events.stream().map(EventMapper::getEventShortDto).collect(Collectors.toList());
+    }
+
+    @Override
+    @Transactional
+    public EventRequestStatusUpdateResult patchRequestStatus(Long userId, Long eventId,
+                                                             EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest) {
+        log.info("EventServiceImpl: изменение статуса для запросов с id: {}",
+                eventRequestStatusUpdateRequest.getRequestIds());
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " was not found"));
+
+        if (!event.getInitiator().getId().equals(userId)) {
+            throw new ForbiddenException("Пользователь не инициатор события");
+        }
+
+        Long confirmLimit = requestRepository.countByEventIdAndStatus(eventId, RequestState.CONFIRMED);
+        if (event.getParticipantLimit() != 0 && event.getParticipantLimit() <= confirmLimit) {
+            throw new ForbiddenException("The participant limit has been reached");
+        }
+
+        List<Request> requestsToUpdate = requestRepository.findAllByIdIn(eventRequestStatusUpdateRequest.getRequestIds());
+        List<Request> confirmedRequests = new ArrayList<>();
+        List<Request> rejectedRequests = new ArrayList<>();
+
+
+        for (Request request : requestsToUpdate) {
+            if (!request.getStatus().equals(RequestState.PENDING)) {
+                throw new ForbiddenException("Статус заявки должен быть PENDING");
+            }
+
+            if (!request.getEvent().getId().equals(eventId)) {
+                rejectedRequests.add(request);
+                continue;
+            }
+
+            if (eventRequestStatusUpdateRequest.getStatus().equals(EventRequestStatusUpdateRequest.StateAction.CONFIRMED)) {
+                if (confirmLimit < event.getParticipantLimit()) {
+                    request.setStatus(RequestState.CONFIRMED);
+                    confirmLimit++;
+                    confirmedRequests.add(request);
+                } else {
+                    request.setStatus(RequestState.REJECTED);
+                    rejectedRequests.add(request);
+                }
+            } else if (eventRequestStatusUpdateRequest.getStatus().equals(EventRequestStatusUpdateRequest.StateAction.REJECTED)) {
+                request.setStatus(RequestState.REJECTED);
+                rejectedRequests.add(request);
+            }
+
+        }
+
+        requestRepository.saveAll(confirmedRequests);
+
+        return EventRequestStatusUpdateResult.builder()
+                .rejectedRequests(rejectedRequests.stream().map(RequestMapper::getParticipationRequestDto).collect(Collectors.toList()))
+                .confirmedRequests(confirmedRequests.stream().map(RequestMapper::getParticipationRequestDto).collect(Collectors.toList()))
+                .build();
+
     }
 }

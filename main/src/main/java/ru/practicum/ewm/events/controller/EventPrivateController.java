@@ -5,10 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.events.dto.EventFullDto;
-import ru.practicum.ewm.events.dto.EventShortDto;
-import ru.practicum.ewm.events.dto.NewEventDto;
-import ru.practicum.ewm.events.dto.UpdateEventUserRequest;
+import ru.practicum.ewm.events.dto.*;
 import ru.practicum.ewm.events.service.EventService;
 
 import javax.validation.Valid;
@@ -63,5 +60,17 @@ public class EventPrivateController {
     ) {
         log.info("EventPrivateController: получение события с id: {}, добавленное пользователем с id: {}", eventId, userId);
         return eventService.getByInitiatorId(userId, eventId);
+    }
+
+    @PatchMapping("/{eventId}/requests")
+    @ResponseStatus(HttpStatus.OK)
+    public EventRequestStatusUpdateResult patchRequestStatus(
+            @PathVariable Long userId,
+            @PathVariable Long eventId,
+            @RequestBody EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest
+    ) {
+        log.info("EventPrivateController: изменение статуса для запросов с id: {}",
+                eventRequestStatusUpdateRequest.getRequestIds());
+        return eventService.patchRequestStatus(userId, eventId, eventRequestStatusUpdateRequest);
     }
 }

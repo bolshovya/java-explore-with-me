@@ -28,4 +28,7 @@ public interface EventService {
     EventFullDto getByIdPublic(Long id, HttpServletRequest request);
 
     List<EventShortDto> getAllPublic(EventParam eventParam);
+
+    EventRequestStatusUpdateResult patchRequestStatus(Long userId, Long eventId,
+                                                      EventRequestStatusUpdateRequest eventRequestStatusUpdateRequest);
 }
