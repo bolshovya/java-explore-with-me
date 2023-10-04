@@ -13,6 +13,7 @@ import ru.practicum.ewm.events.dto.SortState;
 import ru.practicum.ewm.events.service.EventService;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -38,15 +39,15 @@ public class EventPublicController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getAllPublic(
-            @RequestParam(value = "text", required = false) String text,
-            @RequestParam(value = "categories", required = false) List<Long> categories,
-            @RequestParam(value = "paid", required = false) Boolean paid,
-            @RequestParam(value = "rangeStart", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-            @RequestParam(value = "rangeEnd", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-            @RequestParam(value = "onlyAvailable", defaultValue = "false") Boolean onlyAvailable,
-            @RequestParam(value = "sort") SortState sort,
-            @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(value = "size", defaultValue = "10") @PositiveOrZero Integer size,
+            @RequestParam(defaultValue = "") String text,
+            @RequestParam(required = false) List<Long> categories,
+            @RequestParam(required = false) Boolean paid,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+            @RequestParam(defaultValue = "false") Boolean onlyAvailable,
+            @RequestParam(defaultValue = "VIEWS") SortState sort,
+            @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+            @RequestParam(defaultValue = "10") @Positive Integer size,
             HttpServletRequest request
     ) {
         log.info("EventPublicController: публичный запрос на получение списка событий");
@@ -55,7 +56,7 @@ public class EventPublicController {
             rangeStart = LocalDateTime.now();
         }
         if (rangeEnd == null) {
-            rangeEnd = LocalDateTime.MAX;
+            rangeEnd = LocalDateTime.now().plusDays(100);
         }
 
         EventParam eventParam = EventParam.builder()

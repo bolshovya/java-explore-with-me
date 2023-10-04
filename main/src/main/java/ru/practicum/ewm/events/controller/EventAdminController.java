@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.ewm.events.EventParam;
 import ru.practicum.ewm.events.dto.EventFullDto;
 import ru.practicum.ewm.events.dto.UpdateEventAdminRequest;
 import ru.practicum.ewm.events.service.EventService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,16 +38,37 @@ public class EventAdminController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getAllByAdmin(
-            @RequestParam(value = "users", required = false) List<Long> users,
-            @RequestParam(value = "states", required = false) List<String> states,
-            @RequestParam(value = "categories", required = false) List<Long> categories,
-            @RequestParam(value = "rangeStart", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-            @RequestParam(value = "rangeEnd", required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-            @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(value = "size", defaultValue = "10") @PositiveOrZero Integer size
+            @RequestParam(required = false) List<Long> users,
+            @RequestParam(required = false) List<String> states,
+            @RequestParam(required = false) List<Long> categories,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+            @Valid @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+            @Valid @RequestParam(defaultValue = "10") @Positive Integer size
     ) {
+        if (users != null && users.size() == 1 && users.get(0).equals(0L)) {
+            users = null;
+        }
+        if (categories != null && categories.size() == 1 && categories.get(0).equals(0L)) {
+            categories = null;
+        }
+        if (rangeStart == null) {
+            rangeStart = LocalDateTime.now();
+        }
+        if (rangeEnd == null) {
+            rangeEnd = LocalDateTime.now().plusYears(100);
+        }
         log.info("EventAdminController: получение списка всех событий с id пользователей: {}, статусом: {}, " +
                 "категорией: {}, rangeStart: {}, rangeEnd: {}", users, states, categories, rangeStart, rangeEnd, from, size);
-        return eventService.getAllByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
+
+        return eventService.getAllByAdmin(EventParam.builder()
+                .users(users)
+                .states(states)
+                .categories(categories)
+                .rangeStart(rangeStart)
+                .rangeEnd(rangeEnd)
+                .from(from)
+                .size(size)
+                .build());
     }
 }

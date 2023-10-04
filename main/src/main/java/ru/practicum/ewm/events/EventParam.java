@@ -1,5 +1,6 @@
 package ru.practicum.ewm.events;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,7 @@ import ru.practicum.ewm.events.dto.SortState;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -26,8 +28,10 @@ public class EventParam {
 
     private Boolean paid;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime rangeStart;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime rangeEnd;
 
     private Boolean onlyAvailable;
@@ -37,6 +41,10 @@ public class EventParam {
     private Integer from;
 
     private Integer size;
+
+    private List<Long> users;
+
+    private List<String> states;
 
     public Pageable getPageable() {
         return PageRequest.of(from / size, size);

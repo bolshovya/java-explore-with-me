@@ -26,6 +26,8 @@ public interface EventService {
     List<EventFullDto> getAllByAdmin(List<Long> users, List<String> states, List<Long> categories,
                                      LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size);
 
+    List<EventFullDto> getAllByAdmin(EventParam eventParam);
+
     EventFullDto getByIdPublic(Long id, HttpServletRequest request);
 
     List<EventShortDto> getAllPublic(EventParam eventParam);
