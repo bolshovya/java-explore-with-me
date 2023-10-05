@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.events.EventParam;
 import ru.practicum.ewm.events.dto.EventFullDto;
+import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.dto.UpdateEventAdminRequest;
 import ru.practicum.ewm.events.service.EventService;
 
@@ -39,7 +40,7 @@ public class EventAdminController {
     @ResponseStatus(HttpStatus.OK)
     public List<EventFullDto> getAllByAdmin(
             @RequestParam(required = false) List<Long> users,
-            @RequestParam(required = false) List<String> states,
+            @RequestParam(required = false) List<EventState> states,
             @RequestParam(required = false) List<Long> categories,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,

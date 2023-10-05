@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.dto.SortState;
 
 import javax.servlet.http.HttpServletRequest;
@@ -44,7 +45,7 @@ public class EventParam {
 
     private List<Long> users;
 
-    private List<String> states;
+    private List<EventState> states;
 
     public Pageable getPageable() {
         return PageRequest.of(from / size, size);

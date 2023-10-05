@@ -11,6 +11,7 @@ import ru.practicum.ewm.events.dto.EventFullDto;
 import ru.practicum.ewm.events.dto.EventShortDto;
 import ru.practicum.ewm.events.dto.SortState;
 import ru.practicum.ewm.events.service.EventService;
+import ru.practicum.ewm.exception.BadRequestException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Positive;
@@ -57,6 +58,9 @@ public class EventPublicController {
         }
         if (rangeEnd == null) {
             rangeEnd = LocalDateTime.now().plusDays(100);
+        }
+        if (rangeStart.isAfter(rangeEnd)) {
+            throw new BadRequestException();
         }
 
         EventParam eventParam = EventParam.builder()

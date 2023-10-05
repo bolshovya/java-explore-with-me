@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.users.dto.UserDto;
 import ru.practicum.ewm.users.service.UserService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class UserAdminController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public UserDto create(
-            @RequestBody UserDto userDto) {
+            @Valid @RequestBody UserDto userDto) {
         log.info("UserAdminController: сохранение пользователя: {}", userDto);
         return userService.create(userDto);
     }

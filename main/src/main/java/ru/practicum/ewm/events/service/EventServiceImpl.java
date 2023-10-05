@@ -88,10 +88,6 @@ public class EventServiceImpl implements EventService {
         return EventMapper.getEventFullDto(eventFromDb);
     }
 
-    /**
-     *  изменить можно только отмененные события или события в состоянии ожидания модерации (Ожидается код ошибки 409)
-     *  дата и время на которые намечено событие не может быть раньше, чем через два часа от текущего момента (Ожидается код ошибки 409)
-     */
     @Override
     @Transactional
     public EventFullDto updateEventByCurrentUser(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
@@ -165,11 +161,6 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    /**
-     * дата начала изменяемого события должна быть не ранее чем за час от даты публикации. (Ожидается код ошибки 409)
-     * событие можно публиковать, только если оно в состоянии ожидания публикации (Ожидается код ошибки 409)
-     * событие можно отклонить, только если оно еще не опубликовано (Ожидается код ошибки 409)
-     */
     @Override
     @Transactional
     public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
@@ -236,7 +227,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getAllByAdmin(List<Long> users, List<String> states, List<Long> categories,
+    public List<EventFullDto> getAllByAdmin(List<Long> users, List<EventState> states, List<Long> categories,
                                             LocalDateTime rangeStart, LocalDateTime rangeEnd, Integer from, Integer size) {
         log.info("EventServiceImpl: получение списка всех событий с id пользователей: {}, статусом: {}, " +
                 "категорией: {}, rangeStart: {}, rangeEnd: {}", users, states, categories, rangeStart, rangeEnd);

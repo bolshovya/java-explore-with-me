@@ -9,6 +9,8 @@ import ru.practicum.ewm.categories.dto.CategoryDto;
 import ru.practicum.ewm.categories.dto.NewCategoryDto;
 import ru.practicum.ewm.categories.service.CategoryService;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping(path = "/admin/categories")
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
@@ -20,7 +22,7 @@ public class CategoryAdminController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public CategoryDto create(
-            @RequestBody NewCategoryDto newCategoryDto
+            @Valid @RequestBody NewCategoryDto newCategoryDto
     ) {
         log.info("CategoryAdminController: сохранение категории: {}", newCategoryDto);
         return categoryService.create(newCategoryDto);
@@ -39,7 +41,7 @@ public class CategoryAdminController {
     @ResponseStatus(code = HttpStatus.OK)
     public CategoryDto update(
             @PathVariable Long catId,
-            @RequestBody NewCategoryDto newCategoryDto
+            @Valid @RequestBody NewCategoryDto newCategoryDto
     ) {
         log.info("CategoryAdminController: обновление данных для категории с id: {}, {}", catId, newCategoryDto);
         return categoryService.update(catId, newCategoryDto);
