@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.users.User;
 import ru.practicum.ewm.users.dto.UserDto;
@@ -26,8 +27,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public UserDto create(UserDto userDto) {
         log.info("UserServiceImpl: сохранение пользователя: {}", userDto);
+        if (userRepository.existsUserByName(userDto.getName())) {
+            throw new ForbiddenException();
+        }
         User userFromDb = userRepository.save(UserMapper.getUser(userDto));
-        
         log.info("UserServiceImpl: пользователю присвоен id: {}", userFromDb.getId());
         return UserMapper.getUserDto(userFromDb);
     }

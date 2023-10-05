@@ -11,6 +11,7 @@ import ru.practicum.ewm.categories.dto.CategoryDto;
 import ru.practicum.ewm.categories.dto.CategoryMapper;
 import ru.practicum.ewm.categories.dto.NewCategoryDto;
 import ru.practicum.ewm.categories.storage.CategoryRepository;
+import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.exception.NotFoundException;
 
 import java.util.List;
@@ -27,6 +28,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryDto create(NewCategoryDto newCategoryDto) {
         log.info("CategoryServiceImpl: сохранение категории: {}", newCategoryDto);
+        if (categoryRepository.existsCategoryByName(newCategoryDto.getName())) {
+            throw new ForbiddenException();
+        }
         Category categoryFromDb = categoryRepository.save(CategoryMapper.getCategory(newCategoryDto));
         log.info("CategoryServiceImpl: категории присвоен id: {}", categoryFromDb.getId());
         return CategoryMapper.getCategoryDto(categoryFromDb);
@@ -46,14 +50,17 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public CategoryDto update(Long catId, NewCategoryDto newCategoryDto) {
-        categoryRepository.findById(catId)
+        Category categoryFromDb = categoryRepository.findById(catId)
                 .orElseThrow(() ->
                         new NotFoundException("Category with id=" + catId + " was not found"));
+
+        if (categoryRepository.existsCategoryByNameAndIdNot(newCategoryDto.getName(),catId)) {
+            throw new ForbiddenException();
+        }
         log.info("CategoryServiceImpl: обновление данных для категории с id: {}, {}", catId, newCategoryDto);
-        Category categoryToDb = CategoryMapper.getCategory(newCategoryDto);
-        categoryToDb.setId(catId);
-        Category updatedCategory = categoryRepository.save(categoryToDb);
-        return CategoryMapper.getCategoryDto(updatedCategory);
+        categoryFromDb.setName(newCategoryDto.getName());
+
+        return CategoryMapper.getCategoryDto(categoryRepository.save(categoryFromDb));
     }
 
     @Override

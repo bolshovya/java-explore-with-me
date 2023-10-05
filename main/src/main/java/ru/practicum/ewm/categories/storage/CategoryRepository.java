@@ -8,4 +8,8 @@ import ru.practicum.ewm.categories.Category;
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     Page<Category> findAll(Pageable pageable);
+
+    boolean existsCategoryByName(String name);
+
+    boolean existsCategoryByNameAndIdNot(String name, Long id);
 }

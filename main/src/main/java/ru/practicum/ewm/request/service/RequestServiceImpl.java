@@ -49,19 +49,23 @@ public class RequestServiceImpl implements RequestService {
         User userFromDb = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User with id=" + userId + " was not found"));
 
-        if (eventFromDb.getInitiator().equals(userId)) {
+        if (eventFromDb.getInitiator().getId().equals(userId)) {
             throw new ForbiddenException("Инициатор события не может добавить запрос на участие в своём событии");
         }
-        request.setRequester(userFromDb);
-
+        if (eventFromDb.getParticipantLimit() > 0) {
+            if (eventFromDb.getParticipantLimit() <= requestRepository.countByEventIdAndStatus(eventId, RequestState.CONFIRMED)) {
+                throw new ForbiddenException("У события достигнут лимит запросов на участие");
+            }
+        }
         if (!eventFromDb.getState().equals(EventState.PUBLISHED)) {
             throw new ForbiddenException("Нельзя участвовать в неопубликованном событии");
         }
+        request.setRequester(userFromDb);
+
         request.setEvent(eventFromDb);
 
-        if (eventFromDb.getRequestModeration().equals(false)) {
-            request.setStatus(RequestState.CONFIRMED);
-        }
+        request.setStatus((eventFromDb.getRequestModeration() && !eventFromDb.getParticipantLimit().equals(0)) ?
+                RequestState.PENDING : RequestState.CONFIRMED);
 
         request = requestRepository.save(request);
 

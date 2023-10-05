@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.compilations.dto.CompilationDto;
 import ru.practicum.ewm.compilations.service.CompilationService;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
@@ -23,8 +25,8 @@ public class CompilationPublicController {
     @ResponseStatus(HttpStatus.OK)
     public List<CompilationDto> getAll(
             @RequestParam(required = false) Boolean pinned,
-            @RequestParam(value = "from", defaultValue = "0") @PositiveOrZero Integer from,
-            @RequestParam(value = "size", defaultValue = "10") @PositiveOrZero Integer size
+            @Valid @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+            @Valid @RequestParam(defaultValue = "10") @Positive Integer size
     ) {
         log.info("CompilationPublicController: получение всех подборок событий");
         return compilationService.getAll(pinned, from, size);

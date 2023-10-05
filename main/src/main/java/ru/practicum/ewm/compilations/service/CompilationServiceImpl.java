@@ -52,8 +52,6 @@ public class CompilationServiceImpl implements CompilationService {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Compilation with id=" + compId + " was not found"));
 
-        //log.info("CompilationServiceImpl: удаление подборки с id: {}", compId);
-
         compilationRepository.delete(compilation);
     }
 
@@ -71,8 +69,8 @@ public class CompilationServiceImpl implements CompilationService {
         if (updateCompilationRequest.getPinned() != null) {
             compilation.setPinned(updateCompilationRequest.getPinned());
         }
-        if (updateCompilationRequest.getEvents() != null || !updateCompilationRequest.getEvents().isEmpty()) {
-            compilation.setEvents(eventRepository.findAllById(updateCompilationRequest.getEvents()).stream().collect(Collectors.toSet()));
+        if (updateCompilationRequest.getEvents() != null) {
+            compilation.setEvents(new HashSet<>(eventRepository.findAllById(updateCompilationRequest.getEvents())));
         }
 
         compilation = compilationRepository.save(compilation);

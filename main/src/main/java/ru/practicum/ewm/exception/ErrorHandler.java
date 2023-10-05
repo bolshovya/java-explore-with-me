@@ -1,14 +1,12 @@
 package ru.practicum.ewm.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.time.LocalDateTime;
 
 @RestControllerAdvice
@@ -49,15 +47,20 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiError handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        return ApiError.builder()
+                .status(HttpStatus.FORBIDDEN)
+                .reason("For the requested operation the conditions are not met.")
+                .message(e.getMessage())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiError handleException(Exception e, HttpStatus status) {
         log.error("Error", e);
-        /*
-        StringWriter out = new StringWriter();
-        e.printStackTrace(new PrintWriter(out));
-        String stackTrace = out.toString();
-
-         */
         return ApiError.builder()
                 .status(status)
                 .reason("Что-то пошло не так")
@@ -65,23 +68,4 @@ public class ErrorHandler {
                 .errors(e.getStackTrace())
                 .build();
     }
-
-    /*
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorResponse> notFoundException(NotFoundException e) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(new ErrorResponse(e.getMessage()));
-    }
-
-     */
-
-    /*
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse handleConflictException(ConflictException e) {
-        return new ErrorResponse(e.getMessage());
-    }
-
-     */
 }
