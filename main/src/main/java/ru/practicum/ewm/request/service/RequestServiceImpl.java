@@ -45,7 +45,7 @@ public class RequestServiceImpl implements RequestService {
         Request request = Request.builder().created(LocalDateTime.now()).status(RequestState.PENDING).build();
 
         Event eventFromDb = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId +" was not found"));
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " was not found"));
         User userFromDb = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User with id=" + userId + " was not found"));
 

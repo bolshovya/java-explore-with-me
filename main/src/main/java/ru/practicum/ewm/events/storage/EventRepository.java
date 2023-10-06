@@ -10,7 +10,7 @@ import ru.practicum.ewm.events.dto.EventState;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface EventRepository extends JpaRepository<Event, Long>{
+public interface EventRepository extends JpaRepository<Event, Long> {
 
 
     List<Event> findAllByInitiatorId(Long initiatorId, Pageable pageable);

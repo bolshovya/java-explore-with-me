@@ -54,7 +54,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventFullDto create(Long userId, NewEventDto newEventDto) {
-        if(newEventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+        if (newEventDto.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new ForbiddenException("Field: eventDate. Error: должно содержать дату, которая еще не наступила. " +
                     "Value: " + newEventDto.getEventDate());
         }
@@ -91,7 +91,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventFullDto updateEventByCurrentUser(Long userId, Long eventId, UpdateEventUserRequest updateEventUserRequest) {
-        if(updateEventUserRequest.getEventDate() != null &&
+        if (updateEventUserRequest.getEventDate() != null &&
                 updateEventUserRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
             throw new ForbiddenException("Field: eventDate. Error: должно содержать дату, которая еще не наступила. " +
                     "Value: " + updateEventUserRequest.getEventDate());
@@ -99,7 +99,7 @@ public class EventServiceImpl implements EventService {
 
         Event eventFromDb = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " was not found"));
-        if(eventFromDb.getState().equals(EventState.PUBLISHED)) {
+        if (eventFromDb.getState().equals(EventState.PUBLISHED)) {
             throw new ForbiddenException("Only pending or canceled events can be changed");
         }
 
@@ -164,7 +164,7 @@ public class EventServiceImpl implements EventService {
     @Override
     @Transactional
     public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
-        if(updateEventAdminRequest.getEventDate() != null &&
+        if (updateEventAdminRequest.getEventDate() != null &&
                 updateEventAdminRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
             throw new ForbiddenException("Field: eventDate. Error: должно быть не ранее, чем за час от даты публикации " +
                     "Value: " + updateEventAdminRequest.getEventDate());
@@ -177,13 +177,13 @@ public class EventServiceImpl implements EventService {
 
         log.info("EventServiceImpl: события с id: {} найдено в БД: {}", eventId, eventFromDb);
 
-        if(updateEventAdminRequest.getStateAction() != null) {
-            if(updateEventAdminRequest.getStateAction().equals(StateActionAdminRequest.PUBLISH_EVENT) &&
+        if (updateEventAdminRequest.getStateAction() != null) {
+            if (updateEventAdminRequest.getStateAction().equals(StateActionAdminRequest.PUBLISH_EVENT) &&
                     !eventFromDb.getState().equals(EventState.PENDING)) {
                 throw new ForbiddenException("Cannot publish the event because it's not in the right state: " + eventFromDb.getState());
             }
 
-            if(updateEventAdminRequest.getStateAction().equals(StateActionAdminRequest.REJECT_EVENT) &&
+            if (updateEventAdminRequest.getStateAction().equals(StateActionAdminRequest.REJECT_EVENT) &&
                     eventFromDb.getState().equals(EventState.PUBLISHED)) {
                 throw new ForbiddenException("Cannot reject the event because it's not in the right state: " + eventFromDb.getState());
             }
@@ -294,7 +294,7 @@ public class EventServiceImpl implements EventService {
         log.info("EventServiceImpl: получение события с id: {}", id);
 
         Event eventFromDb = eventRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Event with id=" + id +" was not found"));
+                .orElseThrow(() -> new NotFoundException("Event with id=" + id + " was not found"));
 
         if (!eventFromDb.getState().equals(EventState.PUBLISHED)) {
             throw new NotFoundException("Event must be published");
