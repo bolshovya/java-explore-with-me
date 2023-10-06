@@ -24,7 +24,7 @@ public class StatClient {
     private final WebClient webClient;
 
     @Autowired
-    public StatClient(@Value("${ewm-server.url}") String serverUrl) {
+    public StatClient(@Value("${ewm_server_url}") String serverUrl) {
         webClient = WebClient.builder().baseUrl(serverUrl).build();
     }
 
