@@ -1,7 +1,7 @@
 package ru.practicum.ewm.request.dto;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.ewm.request.Request;
+import ru.practicum.ewm.request.model.Request;
 
 @UtilityClass
 public class RequestMapper {

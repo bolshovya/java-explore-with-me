@@ -1,7 +1,7 @@
 package ru.practicum.ewm.events.service;
 
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.events.EventParam;
+import ru.practicum.ewm.events.model.EventParam;
 import ru.practicum.ewm.events.dto.*;
 import ru.practicum.ewm.request.dto.ParticipationRequestDto;
 

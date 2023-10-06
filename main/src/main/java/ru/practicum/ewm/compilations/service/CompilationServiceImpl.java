@@ -6,13 +6,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.ewm.compilations.Compilation;
+import ru.practicum.ewm.compilations.model.Compilation;
 import ru.practicum.ewm.compilations.dto.CompilationDto;
 import ru.practicum.ewm.compilations.dto.CompilationMapper;
 import ru.practicum.ewm.compilations.dto.NewCompilationDto;
 import ru.practicum.ewm.compilations.dto.UpdateCompilationRequest;
 import ru.practicum.ewm.compilations.storage.CompilationRepository;
-import ru.practicum.ewm.events.Event;
+import ru.practicum.ewm.events.model.Event;
 import ru.practicum.ewm.events.storage.EventRepository;
 import ru.practicum.ewm.exception.NotFoundException;
 

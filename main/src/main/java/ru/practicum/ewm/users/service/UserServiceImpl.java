@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.exception.ForbiddenException;
 import ru.practicum.ewm.exception.NotFoundException;
-import ru.practicum.ewm.users.User;
+import ru.practicum.ewm.users.model.User;
 import ru.practicum.ewm.users.dto.UserDto;
 import ru.practicum.ewm.users.dto.UserMapper;
 import ru.practicum.ewm.users.storage.UserRepository;

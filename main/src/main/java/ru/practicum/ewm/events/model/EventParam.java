@@ -1,4 +1,4 @@
-package ru.practicum.ewm.events;
+package ru.practicum.ewm.events.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,6 @@ import ru.practicum.ewm.events.dto.SortState;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Data

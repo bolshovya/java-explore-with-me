@@ -1,7 +1,7 @@
 package ru.practicum.ewm.compilations.dto;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.ewm.compilations.Compilation;
+import ru.practicum.ewm.compilations.model.Compilation;
 import ru.practicum.ewm.events.dto.EventMapper;
 
 import java.util.stream.Collectors;

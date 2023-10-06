@@ -1,9 +1,9 @@
-package ru.practicum.ewm.request;
+package ru.practicum.ewm.request.model;
 
 import lombok.*;
-import ru.practicum.ewm.events.Event;
+import ru.practicum.ewm.events.model.Event;
 import ru.practicum.ewm.request.dto.RequestState;
-import ru.practicum.ewm.users.User;
+import ru.practicum.ewm.users.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

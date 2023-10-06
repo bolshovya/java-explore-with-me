@@ -1,10 +1,10 @@
-package ru.practicum.ewm.events;
+package ru.practicum.ewm.events.model;
 
 import lombok.*;
-import ru.practicum.ewm.categories.Category;
+import ru.practicum.ewm.categories.model.Category;
 import ru.practicum.ewm.events.dto.EventState;
 import ru.practicum.ewm.events.location.Location;
-import ru.practicum.ewm.users.User;
+import ru.practicum.ewm.users.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
