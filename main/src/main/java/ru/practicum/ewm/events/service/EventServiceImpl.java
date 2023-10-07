@@ -401,7 +401,6 @@ public class EventServiceImpl implements EventService {
                 .rejectedRequests(rejectedRequests.stream().map(RequestMapper::getParticipationRequestDto).collect(Collectors.toList()))
                 .confirmedRequests(confirmedRequests.stream().map(RequestMapper::getParticipationRequestDto).collect(Collectors.toList()))
                 .build();
-
     }
 
     @Override
