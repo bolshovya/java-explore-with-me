@@ -251,6 +251,8 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventRepository.findAllByAdmin(eventParam.getUsers(), eventParam.getStates(),
                 eventParam.getCategories(), eventParam.getRangeStart(), eventParam.getRangeEnd(), eventParam.getPageable());
 
+
+
         events = setViews(events, eventParam.getRangeStart(), eventParam.getRangeEnd());
 
         return events.stream()
@@ -366,7 +368,6 @@ public class EventServiceImpl implements EventService {
         List<Request> requestsToUpdate = requestRepository.findAllByIdIn(eventRequestStatusUpdateRequest.getRequestIds());
         List<Request> confirmedRequests = new ArrayList<>();
         List<Request> rejectedRequests = new ArrayList<>();
-
 
         for (Request request : requestsToUpdate) {
             if (!request.getStatus().equals(RequestState.PENDING)) {
