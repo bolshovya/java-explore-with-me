@@ -2,8 +2,10 @@ package ru.practicum.ewm.stats.server.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.ewm.stats.dto.EndpointHit;
 import ru.practicum.ewm.stats.dto.ViewStatDto;
 import ru.practicum.ewm.stats.server.model.StatMapper;
@@ -34,6 +36,9 @@ public class StatServiceImpl implements StatService {
     @Override
     public List<ViewStatDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         log.info("StatServiceImpl GET: получение статистик uri: {}", uris);
+        if (start.isBefore(end)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
 
         if (unique.equals(false)) {
             return statRepository.findCountByUri(uris, start, end).stream().map(StatMapper::getViewStatDto).collect(Collectors.toList());
