@@ -36,7 +36,7 @@ public class StatServiceImpl implements StatService {
     @Override
     public List<ViewStatDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         log.info("StatServiceImpl GET: получение статистик uri: {}", uris);
-        if (start.isBefore(end)) {
+        if (!end.isAfter(start)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
