@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.practicum.ewm.stats.dto.EndpointHit;
 import ru.practicum.ewm.stats.dto.ViewStatDto;
+import ru.practicum.ewm.stats.server.exception.BadRequestException;
 import ru.practicum.ewm.stats.server.model.StatMapper;
 import ru.practicum.ewm.stats.server.model.StatModel;
 import ru.practicum.ewm.stats.server.storage.StatRepository;
@@ -36,8 +37,8 @@ public class StatServiceImpl implements StatService {
     @Override
     public List<ViewStatDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         log.info("StatServiceImpl GET: получение статистик uri: {}", uris);
-        if (!end.isAfter(start)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        if (end.isBefore(start)) {
+            throw new BadRequestException();
         }
 
         if (unique.equals(false)) {
