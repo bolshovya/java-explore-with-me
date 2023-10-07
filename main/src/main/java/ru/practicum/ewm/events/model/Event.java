@@ -65,7 +65,4 @@ public class Event {
 
     @Column(name = "title")
     private String title; // newEventDto
-
-    @Column(name = "views")
-    private Integer views;
 }

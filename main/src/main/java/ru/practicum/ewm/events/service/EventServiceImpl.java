@@ -80,7 +80,6 @@ public class EventServiceImpl implements EventService {
         Location locationFromDb = locationRepository.save(LocationMapper.getLocation(locationDto));
 
         eventToDb.setLocation(locationFromDb);
-        eventToDb.setViews(0);
 
         Event eventFromDb = eventRepository.save(eventToDb);
 
@@ -232,12 +231,12 @@ public class EventServiceImpl implements EventService {
                 "категорией: {}, rangeStart: {}, rangeEnd: {}", users, states, categories, rangeStart, rangeEnd);
         Pageable pageable = PageRequest.of(from / size, size);
 
-        List<Event> events = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, pageable);
+        List<EventFullDto> events = eventRepository.findAllByAdmin(users, states, categories, rangeStart, rangeEnd, pageable)
+                .stream().map(EventMapper::getEventFullDto).collect(Collectors.toList());
 
-        events = setViews(events, rangeStart, rangeEnd);
+        events = setViewsToFullDto(events, rangeStart, rangeEnd);
 
         return events.stream()
-                .map(EventMapper::getEventFullDto)
                 .peek(x -> x.setConfirmedRequests(requestRepository.countByEventIdAndStatus(x.getId(), RequestState.CONFIRMED)))
                 .collect(Collectors.toList());
     }
@@ -247,13 +246,13 @@ public class EventServiceImpl implements EventService {
 
         log.info("EventServiceImpl: получение списка всех событий");
 
-        List<Event> events = eventRepository.findAllByAdmin(eventParam.getUsers(), eventParam.getStates(),
-                eventParam.getCategories(), eventParam.getRangeStart(), eventParam.getRangeEnd(), eventParam.getPageable());
+        List<EventFullDto> events = eventRepository.findAllByAdmin(eventParam.getUsers(), eventParam.getStates(),
+                eventParam.getCategories(), eventParam.getRangeStart(), eventParam.getRangeEnd(), eventParam.getPageable())
+                .stream().map(EventMapper::getEventFullDto).collect(Collectors.toList());
 
-        events = setViews(events, eventParam.getRangeStart(), eventParam.getRangeEnd());
+        events = setViewsToFullDto(events, eventParam.getRangeStart(), eventParam.getRangeEnd());
 
         return events.stream()
-                .map(EventMapper::getEventFullDto)
                 .peek(x -> x.setConfirmedRequests(requestRepository.countByEventIdAndStatus(x.getId(), RequestState.CONFIRMED)))
                 .collect(Collectors.toList());
     }
@@ -268,25 +267,46 @@ public class EventServiceImpl implements EventService {
         return map;
     }
 
-    private List<Event> setViews(List<Event> events, LocalDateTime rangeStart, LocalDateTime rangeEnd) {
+    private List<EventFullDto> setViewsToFullDto(List<EventFullDto> events, LocalDateTime rangeStart, LocalDateTime rangeEnd) {
         List<String> uris = new ArrayList<>();
-        for (Event event : events) {
+        for (EventFullDto event : events) {
             uris.add("/events/" + event.getId());
         }
         List<ViewStatDto> views = statClient.getStat(rangeStart, rangeEnd, uris, true);
 
         if (!views.isEmpty()) {
             Map<Long, Integer> mapViews = getMapViews(views);
-            for (Event event : events) {
+            for (EventFullDto event : events) {
                 event.setViews(mapViews.getOrDefault(event.getId(), 0));
             }
         } else {
-            for (Event event : events) {
+            for (EventFullDto event : events) {
                 event.setViews(0);
             }
         }
         return events;
     }
+
+    private List<EventShortDto> setViewsShortDto(List<EventShortDto> events, LocalDateTime rangeStart, LocalDateTime rangeEnd) {
+        List<String> uris = new ArrayList<>();
+        for (EventShortDto event : events) {
+            uris.add("/events/" + event.getId());
+        }
+        List<ViewStatDto> views = statClient.getStat(rangeStart, rangeEnd, uris, true);
+
+        if (!views.isEmpty()) {
+            Map<Long, Integer> mapViews = getMapViews(views);
+            for (EventShortDto event : events) {
+                event.setViews(mapViews.getOrDefault(event.getId(), 0));
+            }
+        } else {
+            for (EventShortDto event : events) {
+                event.setViews(0);
+            }
+        }
+        return events;
+    }
+
 
     @Override
     public EventFullDto getByIdPublic(Long id, HttpServletRequest request) {
@@ -327,20 +347,24 @@ public class EventServiceImpl implements EventService {
                 .timestamp(LocalDateTime.now())
                 .build());
 
-        List<Event> events = eventRepository.findAllPublic(eventParam.getText(), eventParam.getCategories(), eventParam.getPaid(),
+        List<Event> eventsFromDb = eventRepository.findAllPublic(eventParam.getText(), eventParam.getCategories(), eventParam.getPaid(),
                 eventParam.getRangeStart(), eventParam.getRangeEnd(), eventParam.getPageable());
 
         if (eventParam.getOnlyAvailable()) {
-            events = events.stream().filter(x -> x.getParticipantLimit().equals(0)).collect(Collectors.toList());
+            eventsFromDb = eventsFromDb.stream().filter(x -> x.getParticipantLimit().equals(0)).collect(Collectors.toList());
         }
+
+        List<EventShortDto> events = eventsFromDb.stream().map(EventMapper::getEventShortDto).collect(Collectors.toList());
+
+        events = setViewsShortDto(events, eventParam.getRangeStart(), eventParam.getRangeEnd());
 
         if (eventParam.getSort().equals(SortState.EVENT_DATE)) {
-            events = events.stream().sorted(Comparator.comparing(Event::getEventDate)).collect(Collectors.toList());
+            events = events.stream().sorted(Comparator.comparing(EventShortDto::getEventDate)).collect(Collectors.toList());
         } else if (eventParam.getSort().equals(SortState.VIEWS)) {
-            events = events.stream().sorted(Comparator.comparing(Event::getViews)).collect(Collectors.toList());
+            events = events.stream().sorted(Comparator.comparing(EventShortDto::getViews)).collect(Collectors.toList());
         }
 
-        return events.stream().map(EventMapper::getEventShortDto).collect(Collectors.toList());
+        return events;
     }
 
     @Override
