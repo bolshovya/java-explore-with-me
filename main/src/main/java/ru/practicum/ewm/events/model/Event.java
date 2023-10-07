@@ -30,9 +30,6 @@ public class Event {
     @JoinColumn(name = "category_id")
     private Category category; // +EventServiceImpl
 
-    @Column(name = "confirmed_requests")
-    private Integer confirmedRequests;
-
     @Column(name = "created_on")
     private LocalDateTime createdOn; // +EventServiceImpl
 
