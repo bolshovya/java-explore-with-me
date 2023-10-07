@@ -251,8 +251,6 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventRepository.findAllByAdmin(eventParam.getUsers(), eventParam.getStates(),
                 eventParam.getCategories(), eventParam.getRangeStart(), eventParam.getRangeEnd(), eventParam.getPageable());
 
-
-
         events = setViews(events, eventParam.getRangeStart(), eventParam.getRangeEnd());
 
         return events.stream()
