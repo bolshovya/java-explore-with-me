@@ -80,7 +80,6 @@ public class EventServiceImpl implements EventService {
         Location locationFromDb = locationRepository.save(LocationMapper.getLocation(locationDto));
 
         eventToDb.setLocation(locationFromDb);
-        eventToDb.setConfirmedRequests(0);
         eventToDb.setViews(0);
 
         Event eventFromDb = eventRepository.save(eventToDb);
