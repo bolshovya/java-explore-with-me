@@ -47,12 +47,6 @@ public class EventAdminController {
             @Valid @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
             @Valid @RequestParam(defaultValue = "10") @Positive Integer size
     ) {
-        if (users != null && users.size() == 1 && users.get(0).equals(0L)) {
-            users = null;
-        }
-        if (categories != null && categories.size() == 1 && categories.get(0).equals(0L)) {
-            categories = null;
-        }
         if (rangeStart == null) {
             rangeStart = LocalDateTime.now();
         }
