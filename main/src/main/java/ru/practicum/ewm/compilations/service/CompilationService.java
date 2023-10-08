@@ -1,6 +1,5 @@
 package ru.practicum.ewm.compilations.service;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.compilations.dto.CompilationDto;
 import ru.practicum.ewm.compilations.dto.NewCompilationDto;
 import ru.practicum.ewm.compilations.dto.UpdateCompilationRequest;
