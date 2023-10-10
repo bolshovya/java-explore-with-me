@@ -1007,13 +1007,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments/1",
+							"raw": "{{baseUrl}}/users/135/comments/1",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								"1",
+								"135",
 								"comments",
 								"1"
 							]
