@@ -117,7 +117,7 @@ public class CommentServiceImpl implements CommentService {
         Event event = eventRepository.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id: " + eventId + " не найдено"));
 
-        return commentRepository.findAllByEventId(eventId, pageable).stream()
+        return commentRepository.findAllByEventIdOrderById(eventId, pageable).stream()
                 .map(CommentMapper::getCommentDto)
                 .collect(Collectors.toList());
     }
