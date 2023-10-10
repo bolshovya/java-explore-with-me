@@ -227,7 +227,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('category');",
 									"    pm.expect(jsonData.category).to.have.property('id');",
-									"    pm.expect(jsonData.category.id, '\"category.id\"  must be \"106\"').to.eql(106);",
+									"    pm.expect(jsonData.category.id, '\"category.id\"  must be \"120\"').to.eql(120);",
 									"});",
 									"pm.test(\"Test event 'category.name' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -296,7 +296,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"annotation\":\"Ipsam recusandae fugit deserunt sed occaecati. Voluptate magni deleniti delectus libero omnis. Et architecto molestiae. Quis velit occaecati et consequuntur esse tempora laborum distinctio excepturi. Voluptate et illum error.\",\n    \"category\":1,\n    \"description\":\"Magni vitae atque aut autem sed eos incidunt ex quisquam.\",\n    \"eventDate\":\"2023-10-10 17:12:28\",\n    \"location\":\n        {\n            \"lat\":81.4565,\n            \"lon\":-132.6191\n        },\n    \"paid\":\"false\",\n    \"participantLimit\":\"376\",\n    \"requestModeration\":\"false\",\n    \"title\":\"Provident labore inventore illum fugit impedit eveniet iste iste.\"\n}"
+							"raw": "{\n    \"annotation\":\"Ipsam recusandae fugit deserunt sed occaecati. Voluptate magni deleniti delectus libero omnis. Et architecto molestiae. Quis velit occaecati et consequuntur esse tempora laborum distinctio excepturi. Voluptate et illum error.\",\n    \"category\":120,\n    \"description\":\"Magni vitae atque aut autem sed eos incidunt ex quisquam.\",\n    \"eventDate\":\"2023-10-10 17:12:28\",\n    \"location\":\n        {\n            \"lat\":81.4565,\n            \"lon\":-132.6191\n        },\n    \"paid\":\"false\",\n    \"participantLimit\":\"376\",\n    \"requestModeration\":\"false\",\n    \"title\":\"Provident labore inventore illum fugit impedit eveniet iste iste.\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/135/events",
@@ -384,7 +384,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"text\": \"Отличное мероприятие, очень понравилось, приглашайте ещё\",\n    \"event\":1\n}"
+							"raw": "{\n    \"text\": \"Отличное мероприятие, очень понравилось, приглашайте ещё\",\n    \"event\":106\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/135/comments",
@@ -472,7 +472,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"text\": \"Ужасное мероприятие, очень не понравилось, больше не зовите никогда\",\n    \"event\":1\n}"
+							"raw": "{\n    \"text\": \"Ужасное мероприятие, очень не понравилось, больше не зовите никогда\",\n    \"event\":106\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/135/comments",
@@ -524,7 +524,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('event');",
 									"    pm.expect(jsonData.event).to.have.property('id');",
-									"    pm.expect(jsonData.event.id, '\"event.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData.event.id, '\"event.id\"  must be \"106\"').to.eql(106);",
 									"});",
 									"",
 									"pm.test(\"Test event 'event.annotation' field\", function () {",
@@ -560,7 +560,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"text\": \"Ну так себе, среднее конечно, может быт когда-нибудь ещё приду\",\n    \"event\":1\n}"
+							"raw": "{\n    \"text\": \"Ну так себе, среднее конечно, может быт когда-нибудь ещё приду\",\n    \"event\":106\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/users/136/comments",
@@ -680,7 +680,7 @@
 									"pm.test(\"Test comment[1] 'id' field\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData[1]).to.have.property('id');",
-									"    pm.expect(jsonData[1].id, '\"id\" must be 136').to.eql(136);",
+									"    pm.expect(jsonData[1].id, '\"id\" must be 2').to.eql(2);",
 									"});",
 									"",
 									"pm.test(\"Test comment[1] 'text' field\", function () {",
