@@ -26,7 +26,7 @@
 									"pm.test(\"Test user 'id' field\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
+									"    pm.expect(jsonData.id, '\"id\" must be 135').to.eql(135);",
 									"});",
 									"pm.test(\"Test user 'email' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -91,7 +91,7 @@
 									"pm.test(\"Test user 'id' field\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 2').to.eql(2);",
+									"    pm.expect(jsonData.id, '\"id\" must be 136').to.eql(136);",
 									"});",
 									"pm.test(\"Test user 'email' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -156,7 +156,7 @@
 									"pm.test(\"Test category 'id' field\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
+									"    pm.expect(jsonData.id, '\"id\" must be 120').to.eql(120);",
 									"});",
 									"pm.test(\"Test category 'name' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -216,7 +216,7 @@
 									"pm.test(\"Test event 'id' field\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('id');",
-									"    pm.expect(jsonData.id, '\"id\" must be 1').to.eql(1);",
+									"    pm.expect(jsonData.id, '\"id\" must be 106').to.eql(106);",
 									"});",
 									"pm.test(\"Test event 'annotation' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -227,7 +227,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('category');",
 									"    pm.expect(jsonData.category).to.have.property('id');",
-									"    pm.expect(jsonData.category.id, '\"category.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData.category.id, '\"category.id\"  must be \"106\"').to.eql(106);",
 									"});",
 									"pm.test(\"Test event 'category.name' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -299,13 +299,13 @@
 							"raw": "{\n    \"annotation\":\"Ipsam recusandae fugit deserunt sed occaecati. Voluptate magni deleniti delectus libero omnis. Et architecto molestiae. Quis velit occaecati et consequuntur esse tempora laborum distinctio excepturi. Voluptate et illum error.\",\n    \"category\":1,\n    \"description\":\"Magni vitae atque aut autem sed eos incidunt ex quisquam.\",\n    \"eventDate\":\"2023-10-10 17:12:28\",\n    \"location\":\n        {\n            \"lat\":81.4565,\n            \"lon\":-132.6191\n        },\n    \"paid\":\"false\",\n    \"participantLimit\":\"376\",\n    \"requestModeration\":\"false\",\n    \"title\":\"Provident labore inventore illum fugit impedit eveniet iste iste.\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/events",
+							"raw": "{{baseUrl}}/users/135/events",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								"1",
+								"135",
 								"events"
 							]
 						}
@@ -335,7 +335,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('author');",
 									"    pm.expect(jsonData.author).to.have.property('id');",
-									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"135\"').to.eql(135);",
 									"});",
 									"pm.test(\"Test event 'author.name' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -348,7 +348,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('event');",
 									"    pm.expect(jsonData.event).to.have.property('id');",
-									"    pm.expect(jsonData.event.id, '\"event.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData.event.id, '\"event.id\"  must be \"106\"').to.eql(106);",
 									"});",
 									"",
 									"pm.test(\"Test event 'event.annotation' field\", function () {",
@@ -387,13 +387,13 @@
 							"raw": "{\n    \"text\": \"Отличное мероприятие, очень понравилось, приглашайте ещё\",\n    \"event\":1\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments",
+							"raw": "{{baseUrl}}/users/135/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								"1",
+								"135",
 								"comments"
 							]
 						}
@@ -423,7 +423,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('author');",
 									"    pm.expect(jsonData.author).to.have.property('id');",
-									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"135\"').to.eql(135);",
 									"});",
 									"pm.test(\"Test event 'author.name' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -436,7 +436,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('event');",
 									"    pm.expect(jsonData.event).to.have.property('id');",
-									"    pm.expect(jsonData.event.id, '\"event.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData.event.id, '\"event.id\"  must be \"106\"').to.eql(106);",
 									"});",
 									"",
 									"pm.test(\"Test event 'event.annotation' field\", function () {",
@@ -475,13 +475,13 @@
 							"raw": "{\n    \"text\": \"Ужасное мероприятие, очень не понравилось, больше не зовите никогда\",\n    \"event\":1\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments",
+							"raw": "{{baseUrl}}/users/135/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								"1",
+								"135",
 								"comments"
 							]
 						}
@@ -511,7 +511,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('author');",
 									"    pm.expect(jsonData.author).to.have.property('id');",
-									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"2\"').to.eql(2);",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"136\"').to.eql(136);",
 									"});",
 									"pm.test(\"Test event 'author.name' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -563,13 +563,13 @@
 							"raw": "{\n    \"text\": \"Ну так себе, среднее конечно, может быт когда-нибудь ещё приду\",\n    \"event\":1\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/2/comments",
+							"raw": "{{baseUrl}}/users/136/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								"2",
+								"136",
 								"comments"
 							]
 						}
@@ -610,13 +610,13 @@
 							"raw": "{\n    \"event\":1\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/2/comments",
+							"raw": "{{baseUrl}}/users/136/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								"2",
+								"136",
 								"comments"
 							]
 						}
@@ -624,7 +624,7 @@
 					"response": []
 				},
 				{
-					"name": "Comment get from user 1",
+					"name": "Comment get from user 1 private",
 					"event": [
 						{
 							"listen": "test",
@@ -648,7 +648,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData[0]).to.have.property('author');",
 									"    pm.expect(jsonData[0].author).to.have.property('id');",
-									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"135\"').to.eql(135);",
 									"});",
 									"pm.test(\"Test event[0] 'author.name' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -661,7 +661,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData[0]).to.have.property('event');",
 									"    pm.expect(jsonData[0].event).to.have.property('id');",
-									"    pm.expect(jsonData[0].event.id, '\"event.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData[0].event.id, '\"event.id\"  must be \"106\"').to.eql(106);",
 									"});",
 									"",
 									"pm.test(\"Test event[0] 'event.annotation' field\", function () {",
@@ -680,7 +680,7 @@
 									"pm.test(\"Test comment[1] 'id' field\", function () {",
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData[1]).to.have.property('id');",
-									"    pm.expect(jsonData[1].id, '\"id\" must be 2').to.eql(2);",
+									"    pm.expect(jsonData[1].id, '\"id\" must be 136').to.eql(136);",
 									"});",
 									"",
 									"pm.test(\"Test comment[1] 'text' field\", function () {",
@@ -703,13 +703,13 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments",
+							"raw": "{{baseUrl}}/users/135/comments",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								"1",
+								"135",
 								"comments"
 							]
 						}
@@ -739,7 +739,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('author');",
 									"    pm.expect(jsonData.author).to.have.property('id');",
-									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"135\"').to.eql(135);",
 									"});",
 									"pm.test(\"Test event 'author.name' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -752,7 +752,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('event');",
 									"    pm.expect(jsonData.event).to.have.property('id');",
-									"    pm.expect(jsonData.event.id, '\"event.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData.event.id, '\"event.id\"  must be \"106\"').to.eql(106);",
 									"});",
 									"",
 									"pm.test(\"Test event 'event.annotation' field\", function () {",
@@ -791,13 +791,13 @@
 							"raw": "{\n    \"text\": \"Я передумал, метоприятие на самом деле было хорошее\"\n}"
 						},
 						"url": {
-							"raw": "{{baseUrl}}/users/1/comments/2",
+							"raw": "{{baseUrl}}/users/135/comments/2",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"users",
-								"1",
+								"135",
 								"comments",
 								"2"
 							]
@@ -828,7 +828,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('author');",
 									"    pm.expect(jsonData.author).to.have.property('id');",
-									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"2\"').to.eql(2);",
+									"    pm.expect(jsonData.author.id, '\"author.id\"  must be \"136\"').to.eql(136);",
 									"});",
 									"pm.test(\"Test event 'author.name' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -841,7 +841,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData).to.have.property('event');",
 									"    pm.expect(jsonData.event).to.have.property('id');",
-									"    pm.expect(jsonData.event.id, '\"event.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData.event.id, '\"event.id\"  must be \"106\"').to.eql(106);",
 									"});",
 									"",
 									"pm.test(\"Test event 'event.annotation' field\", function () {",
@@ -884,7 +884,7 @@
 					"response": []
 				},
 				{
-					"name": "Comment get from user 1 Copy",
+					"name": "Comment get by event",
 					"event": [
 						{
 							"listen": "test",
@@ -908,7 +908,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData[0]).to.have.property('author');",
 									"    pm.expect(jsonData[0].author).to.have.property('id');",
-									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData[0].author.id, '\"author.id\"  must be \"135\"').to.eql(135);",
 									"});",
 									"pm.test(\"Test event[0] 'author.name' field\", function () {",
 									"    var jsonData = pm.response.json();",
@@ -921,7 +921,7 @@
 									"    var jsonData = pm.response.json();",
 									"    pm.expect(jsonData[0]).to.have.property('event');",
 									"    pm.expect(jsonData[0].event).to.have.property('id');",
-									"    pm.expect(jsonData[0].event.id, '\"event.id\"  must be \"1\"').to.eql(1);",
+									"    pm.expect(jsonData[0].event.id, '\"event.id\"  must be \"106\"').to.eql(106);",
 									"});",
 									"",
 									"pm.test(\"Test event[0] 'event.annotation' field\", function () {",
@@ -975,14 +975,14 @@
 							}
 						],
 						"url": {
-							"raw": "{{baseUrl}}/comments/events/1",
+							"raw": "{{baseUrl}}/comments/events/106",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
 								"comments",
 								"events",
-								"1"
+								"106"
 							]
 						}
 					},
