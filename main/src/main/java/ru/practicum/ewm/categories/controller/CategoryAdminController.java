@@ -20,7 +20,7 @@ public class CategoryAdminController {
     private final CategoryService categoryService;
 
     @PostMapping
-    @ResponseStatus(code = HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED)
     public CategoryDto create(
             @Valid @RequestBody NewCategoryDto newCategoryDto
     ) {
@@ -29,7 +29,7 @@ public class CategoryAdminController {
     }
 
     @DeleteMapping("/{catId}")
-    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteCategoryById(
             @PathVariable Long catId
     ) {
@@ -38,7 +38,7 @@ public class CategoryAdminController {
     }
 
     @PatchMapping("/{catId}")
-    @ResponseStatus(code = HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public CategoryDto update(
             @PathVariable Long catId,
             @Valid @RequestBody NewCategoryDto newCategoryDto
